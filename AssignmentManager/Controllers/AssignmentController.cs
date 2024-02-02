@@ -1,37 +1,67 @@
-﻿using AssignmentManager.Models;
+﻿using AssignmentManager.Data;
+using AssignmentManager.Interfaces;
+using AssignmentManager.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AssignmentManager.Controllers
 {
     public class AssignmentController : Controller
     {
-        public IActionResult Index()
+        private readonly IAssignmentRepository _assignmentRepository;
+
+        public AssignmentController(IAssignmentRepository assignmentRepository)
         {
-            var x = new Assignment();
-            x.AssignmentId = 1;
-            x.Status = Data.Enum.Status.Open;
-            x.Priority = Data.Enum.Priority.Trivial;
-            x.Description = "Test assignment";
-            x.LastUpdate = DateTime.Now;
-            x.Name = "Test assignment";
+            this._assignmentRepository = assignmentRepository;
+        }
 
-            var notes = new List<Note>();
+        public async Task<IActionResult> Index(int userId)
+        {
+            // var assignments = _context.Assignments.ToList();
 
-            notes.Add(new Note()
+            //var x = new Assignment();
+            //x.AssignmentId = 1;
+            //x.Status = Data.Enum.Status.Open;
+            //x.Priority = Data.Enum.Priority.Trivial;
+            //x.Description = "Test assignment";
+            //x.LastUpdate = DateTime.Now;
+            //x.Name = "Test assignment";
+
+            //var notes = new List<Note>();
+
+            //notes.Add(new Note()
+            //{
+            //    NoteId = 1,
+            //    Description = "note 1"
+            //});
+
+            //var y = new Assignment();
+            //y.AssignmentId = 2;
+            //y.Status = Data.Enum.Status.Open;
+            //y.Priority = Data.Enum.Priority.Urgent;
+            //y.Description = "Test assignment Urgent";
+            //y.LastUpdate = DateTime.Now;
+            //y.Name = "URGENT!!";
+
+            //y.Notes = notes;
+
+            //var assignments = new List<Assignment>() { x, y }.OrderByDescending(a => a.Priority);
+
+            IEnumerable<Assignment> assignments = await _assignmentRepository.GetAssignmentsByUserIdAsync(userId);
+
+            return View(assignments);
+        }
+
+        public async Task<IActionResult> Detail(int assignmentId)
+        {
+            Assignment? assignment = await _assignmentRepository.GetAssignmentByIdAsync(assignmentId);
+
+            if (assignment != null)
             {
-                NoteId = 1,
-                Description = "note 1"
-            });
+                return View(assignment);
+            }
 
-            notes.Add(new Note()
-            {
-                NoteId = 2,
-                Description = "note 2"
-            });
-
-            x.Notes = notes;
-
-            return View(x);
+            return NotFound();
         }
     }
 }

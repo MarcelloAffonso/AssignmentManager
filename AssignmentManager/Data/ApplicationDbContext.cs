@@ -13,5 +13,7 @@ namespace AssignmentManager.Data
         public DbSet<User> Users { get; set; }
 
         public DbSet<Assignment> Assignments { get; set; }
+
+        public DbSet<Note> Notes { get; set; }
     }
 }
