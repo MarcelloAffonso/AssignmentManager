@@ -1,35 +1,23 @@
-﻿@model Assignment
+﻿@model IEnumerable<Assignment>
 @{
-    ViewData["Title"] = Model.Name;
+    ViewData["Title"] = "Assignments page";
 }
 
 
-<div style="text-align: left">
-    <h1>@Model.Description</h1>
-    <h2>@Model.Status</h2>
-    <h2>@Model.Priority</h2>
-</div>
-
-<div style="text-align: right">
-    <h3>@Model.LastUpdate</h3>
-</div>
-
-<div class="text-center">
-    <h1 class="display-4">Notes list</h1>
-    <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Note</th>
-    </tr>
-  </thead>
-  <tbody>
-    @foreach (var note in Model.Notes)
-    {
-        <tr>
-            <th>@note.Description</th>
-        </tr>
-    }
-  </tbody>
-</table>
-</div>
-
+<section class="space-sm flush-with-above">
+    <ul class="row feature-list feature-list-sm">
+        @foreach (var assignment in Model)
+        {
+             <li class="col-12 col-md-6 col-lg-4">
+              <div class="card-body">
+                <h4 class="card-title">@assignment.Name</h4>
+                 <p class="card-text">@assignment.Description</p>
+                 <p class="card-text">@assignment.Status, @assignment.Priority</p>
+              </div>
+                    <div class="btn-group mb-2">
+                      <a type="btn btn-succes" asp-controller="Assignment" asp-action="Detail" asp-route-id="@assignment.AssignmentId" class="btn btn-success btn-lg">View</a>
+                  </div>
+              </li>
+        }
+    </ul>
+</section>

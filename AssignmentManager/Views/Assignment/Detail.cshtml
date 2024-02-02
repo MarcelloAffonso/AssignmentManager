@@ -1,0 +1,87 @@
+﻿@model Assignment
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+
+<div style="text-align: left">
+    <h1>@Model.Description</h1>
+    <h2>@Model.Status</h2>
+    <h2>@Model.Priority</h2>
+</div>
+
+<div style="text-align: right">
+    <h3>@Model.LastUpdate</h3>
+</div>
+
+<div class="d-gtid gap-2 d-md-flex justify-content-md-start">
+    <a class="btn btn-primary" role="button" asp-controller="Note" asp-action="Create"> Add new note</a>
+</div>
+
+@*<div class="text-center">
+    <h1 class="display-4">Notes list</h1>
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Note</th>
+    </tr>
+  </thead>
+  <tbody>
+            @foreach (var note in Model.Notes)
+            {
+            <tr>
+                <th>@note.Description</th>
+            </tr>
+            }
+  </tbody>
+</table>
+</div>*@
+
+  <div class="main-container">
+      <nav aria-label="breadcrumb" role="navigation" class="bg-primary text-white">
+      </nav>
+      <section class="bg-white space-sm">
+        <div class="container">
+          <div class="row">
+            <!--end of col-->
+            <div class="col-lg-4 d-flex flex-column justify-content-between mr-auto ml-auto">
+              <div>
+                <h1 class="mb-2">@Model.Name</h1>
+                <div>
+                  <span class="badge badge-secondary mr-3">@Model.Status</span>
+                  <span class="badge badge-primary mr-3">@Model.Priority</span>
+                </div>
+                <div>
+                  <ul class="list-inline text-small d-inline-block mb-3">
+                    <li class="list-inline-item"><i class="icon-thumbs-up"></i> 214</li>
+                    <li class="list-inline-item"><i class="icon-message"></i> 6</li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+            </div>
+            <!--end of col-->
+          </div>
+          <!--end of row-->
+        </div>
+        </div>
+        <!--end of container-->
+      </section>
+      <!--end of section-->
+      <section class="space-sm">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-12 col-md-8 col-lg-7">
+              <h5 class="mb-4">Overview</h5>
+              <article>
+                        @Model.Description
+              </article>
+
+            </div>
+            <!--end of col-->
+          </div>
+          <!--end of row-->
+        </div>
+        <!--end of container-->
+      </section>
+</div>
