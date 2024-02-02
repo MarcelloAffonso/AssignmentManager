@@ -1,5 +1,6 @@
 ﻿using AssignmentManager.Data.Enum;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AssignmentManager.Models
 {
@@ -7,6 +8,9 @@ namespace AssignmentManager.Models
     {
         [Key]
         public int AssignmentId { get; set; }
+
+        [ForeignKey("User")]
+        public int? UserId { get; set; }
 
         [Required]
         public Status Status { get; set; }
