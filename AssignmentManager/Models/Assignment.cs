@@ -27,6 +27,6 @@ namespace AssignmentManager.Models
         [Required]
         public DateTime LastUpdate { get; set; }
 
-        public List<Note> Notes { get; set; }
+        public virtual ICollection<Note>? Notes { get; set; }
     }
 }

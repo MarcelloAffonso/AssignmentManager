@@ -16,7 +16,6 @@ namespace AssignmentManager.Models
         [Required]
         public string Username { get; set; }
 
-        [Required]
-        public List<Assignment>? Assignments { get; set; }
+        public virtual ICollection<Assignment>? Assignments { get; set; }
     }
 }

@@ -47,7 +47,7 @@ namespace AssignmentManager.Controllers
 
             //var assignments = new List<Assignment>() { x, y }.OrderByDescending(a => a.Priority);
 
-            IEnumerable<Assignment> assignments = await _assignmentRepository.GetAssignmentsByUserIdAsync(userId);
+            IEnumerable<Assignment> assignments = await _assignmentRepository.GetAssignmentsByUserIdAsync(1);
 
             return View(assignments);
         }
@@ -62,6 +62,29 @@ namespace AssignmentManager.Controllers
             }
 
             return NotFound();
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Assignment assignment)
+        {
+            assignment.Status = Data.Enum.Status.Open;
+            assignment.LastUpdate = DateTime.Now;
+            assignment.AssignmentId = 1;
+            assignment.UserId = 1;
+            assignment.Notes = new List<Note>();
+
+            if(!ModelState.IsValid)
+            {
+                return View(assignment);
+            }
+
+            _assignmentRepository.Add(assignment);
+            return RedirectToAction("Index");
         }
     }
 }
