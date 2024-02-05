@@ -15,9 +15,11 @@
                  <p class="card-text">@assignment.Status, @assignment.Priority</p>
               </div>
                     <div class="btn-group mb-2">
-                      <a type="btn btn-succes" asp-controller="Assignment" asp-action="Detail" asp-route-id="@assignment.AssignmentId" class="btn btn-success btn-lg">View</a>
+                          <a type="btn btn-succes" asp-controller="Assignment" asp-action="Detail" asp-route-assignmentId="@assignment.AssignmentId" class="btn btn-success btn-lg">View</a>
                   </div>
-              </li>
+            </li>
         }
     </ul>
 </section>
+
+

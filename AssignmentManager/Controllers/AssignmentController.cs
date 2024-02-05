@@ -15,7 +15,7 @@ namespace AssignmentManager.Controllers
             this._assignmentRepository = assignmentRepository;
         }
 
-        public async Task<IActionResult> Index(int userId)
+        public async Task<IActionResult> Index()
         {
             // var assignments = _context.Assignments.ToList();
 
@@ -52,7 +52,9 @@ namespace AssignmentManager.Controllers
             return View(assignments);
         }
 
-        public async Task<IActionResult> Detail(int assignmentId)
+
+        [HttpGet]
+        public async Task<IActionResult> Detail([FromQuery] int assignmentId)
         {
             Assignment? assignment = await _assignmentRepository.GetAssignmentByIdAsync(assignmentId);
 
