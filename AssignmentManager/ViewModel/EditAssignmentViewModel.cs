@@ -1,12 +1,15 @@
 ﻿using AssignmentManager.Data.Enum;
+using AssignmentManager.Models;
 
 namespace AssignmentManager.ViewModel
 {
-    public class CreateAssignmentViewModel
+    public class EditAssignmentViewModel
     {
-        //public int UserId { get; set; }
+        public int AssignmentId { get; set; }
 
         public Priority Priority { get; set; }
+
+        public Status Status { get; set; }
 
         public string Name { get; set; }
 
