@@ -15,7 +15,8 @@
                  <p class="card-text">@assignment.Status, @assignment.Priority</p>
               </div>
                     <div class="btn-group mb-2">
-                          <a type="btn btn-succes" asp-controller="Assignment" asp-action="Detail" asp-route-assignmentId="@assignment.AssignmentId" class="btn btn-success btn-lg">View</a>
+                          <a type="btn btn-success" asp-controller="Assignment" asp-action="Detail" asp-route-assignmentId="@assignment.AssignmentId" class="btn btn-success btn-lg">View</a>
+                          <a type="btn btn-primary" asp-controller="Assignment" asp-action="Edit" asp-route-assignmentId="@assignment.AssignmentId" class="btn btn-primary btn-lg">Edit</a>
                   </div>
             </li>
         }

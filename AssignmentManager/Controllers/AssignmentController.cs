@@ -1,6 +1,9 @@
 ﻿using AssignmentManager.Data;
+using AssignmentManager.Data.Enum;
+using AssignmentManager.Helper;
 using AssignmentManager.Interfaces;
 using AssignmentManager.Models;
+using AssignmentManager.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,36 +20,6 @@ namespace AssignmentManager.Controllers
 
         public async Task<IActionResult> Index()
         {
-            // var assignments = _context.Assignments.ToList();
-
-            //var x = new Assignment();
-            //x.AssignmentId = 1;
-            //x.Status = Data.Enum.Status.Open;
-            //x.Priority = Data.Enum.Priority.Trivial;
-            //x.Description = "Test assignment";
-            //x.LastUpdate = DateTime.Now;
-            //x.Name = "Test assignment";
-
-            //var notes = new List<Note>();
-
-            //notes.Add(new Note()
-            //{
-            //    NoteId = 1,
-            //    Description = "note 1"
-            //});
-
-            //var y = new Assignment();
-            //y.AssignmentId = 2;
-            //y.Status = Data.Enum.Status.Open;
-            //y.Priority = Data.Enum.Priority.Urgent;
-            //y.Description = "Test assignment Urgent";
-            //y.LastUpdate = DateTime.Now;
-            //y.Name = "URGENT!!";
-
-            //y.Notes = notes;
-
-            //var assignments = new List<Assignment>() { x, y }.OrderByDescending(a => a.Priority);
-
             IEnumerable<Assignment> assignments = await _assignmentRepository.GetAssignmentsByUserIdAsync(1);
 
             return View(assignments);
@@ -72,21 +45,73 @@ namespace AssignmentManager.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Assignment assignment)
+        public async Task<IActionResult> Create(CreateAssignmentViewModel createAssignmentVM)
         {
-            assignment.Status = Data.Enum.Status.Open;
-            assignment.LastUpdate = DateTime.Now;
-            assignment.AssignmentId = 1;
-            assignment.UserId = 1;
-            assignment.Notes = new List<Note>();
-
-            if(!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View(assignment);
+                // Mapping helper
+                Assignment assignment = AssignmentHelper.GetNewAssignment(createAssignmentVM.Name, createAssignmentVM.Description,
+                    createAssignmentVM.Priority, Status.Open);
+
+                // Default values for a created assignment
+                assignment.UserId = 1;
+                assignment.LastUpdate = DateTime.Now;
+                assignment.Notes = new List<Note>();
+
+                _assignmentRepository.Add(assignment);
+                return RedirectToAction("Index");
+
+            }
+            else
+            {
+                return View(createAssignmentVM);
+            }
+        }
+
+        public async Task<IActionResult> Edit(int assignmentId)
+        {
+            Assignment? assignment = await _assignmentRepository.GetAssignmentByIdAsync(assignmentId);
+
+            if (assignment == null)
+            {
+                return NotFound();
             }
 
-            _assignmentRepository.Add(assignment);
-            return RedirectToAction("Index");
+            EditAssignmentViewModel editAssignmentVM = new EditAssignmentViewModel
+            {
+                AssignmentId = assignmentId,
+                Description = assignment.Description,
+                Priority = assignment.Priority,
+                Status = assignment.Status,
+                Name = assignment.Name
+            };
+
+            return View(editAssignmentVM);
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(EditAssignmentViewModel updateAssignmentVM)
+        {
+            if (ModelState.IsValid)
+            {
+                Assignment assignment = AssignmentHelper.GetNewAssignment(updateAssignmentVM.Name, updateAssignmentVM.Description,
+                    updateAssignmentVM.Priority, updateAssignmentVM.Status);
+
+                // Default values for a created assignment
+                assignment.UserId = 1;
+                assignment.AssignmentId = updateAssignmentVM.AssignmentId;
+                assignment.LastUpdate = DateTime.Now;
+                assignment.Notes = assignment.Notes;
+
+                _assignmentRepository.Update(assignment);
+                return RedirectToAction("Index");
+
+            }
+            else
+            {
+                return View(updateAssignmentVM);
+            }
         }
     }
 }

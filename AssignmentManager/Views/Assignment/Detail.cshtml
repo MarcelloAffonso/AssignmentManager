@@ -1,4 +1,5 @@
 ﻿@using AssignmentManager.Data.Enum;
+@using AssignmentManager.ViewModel;
 @model Assignment
 @{
     ViewData["Title"] = Model.AssignmentId;
@@ -28,16 +29,10 @@
     </div>
     @if (@Model.Notes != null)
     {        
-        <div id="notesZone"></div>
+        <partial name="~/Views/Note/_NotesList.cshtml" model='new NotesListViewModel {Notes = Model.Notes}' />
     }
     else
     {
         <p>There's no notes yet!</p>
     }
 </div>
-
-@section Scripts{
-    <script>
-            $('#notesZone').load("/Note/NotesPartial/"+@Model.AssignmentId)
-    </script>
-}

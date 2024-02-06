@@ -1,12 +1,16 @@
-﻿@*
+﻿@using AssignmentManager.ViewModel;
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@model IEnumerable<Note>
+@model NotesListViewModel
 @{
-    @foreach(var note in Model)
-    {
-        <div class="card-body">
-            <p class="card-text">@note.Description</p>
-        </div>
-    }
+
+    <div class="card" style="width: 24rem;">
+          <ul class="list-group list-group-flush">
+            @foreach (var note in Model.Notes)
+            {
+                <li class="list-group-item">@note.Description</li>
+            }
+          </ul>
+    </div>
 }
