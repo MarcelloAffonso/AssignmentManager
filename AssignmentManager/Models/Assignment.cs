@@ -9,8 +9,8 @@ namespace AssignmentManager.Models
         [Key]
         public int AssignmentId { get; set; }
 
-        [ForeignKey("User")]
-        public int? UserId { get; set; }
+        [ForeignKey("AppUser")]
+        public string? AppUserId { get; set; }
 
         [Required]
         public Status Status { get; set; }

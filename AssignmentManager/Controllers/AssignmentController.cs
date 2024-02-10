@@ -20,7 +20,7 @@ namespace AssignmentManager.Controllers
 
         public async Task<IActionResult> Index()
         {
-            IEnumerable<Assignment> assignments = await _assignmentRepository.GetAssignmentsByUserIdAsync(1);
+            IEnumerable<Assignment> assignments = await _assignmentRepository.GetAssignmentsByUserIdAsync("teste");
 
             return View(assignments);
         }
@@ -54,7 +54,7 @@ namespace AssignmentManager.Controllers
                     createAssignmentVM.Priority, Status.Open);
 
                 // Default values for a created assignment
-                assignment.UserId = 1;
+                assignment.AppUserId = "teste";
                 assignment.LastUpdate = DateTime.Now;
                 assignment.Notes = new List<Note>();
 
@@ -99,7 +99,7 @@ namespace AssignmentManager.Controllers
                     updateAssignmentVM.Priority, updateAssignmentVM.Status);
 
                 // Default values for a created assignment
-                assignment.UserId = 1;
+                assignment.AppUserId = "teste";
                 assignment.AssignmentId = updateAssignmentVM.AssignmentId;
                 assignment.LastUpdate = DateTime.Now;
                 assignment.Notes = assignment.Notes;

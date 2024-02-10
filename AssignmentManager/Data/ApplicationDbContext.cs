@@ -1,16 +1,17 @@
 ﻿using AssignmentManager.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace AssignmentManager.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
         }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<AppUser> Users { get; set; }
 
         public DbSet<Assignment> Assignments { get; set; }
 

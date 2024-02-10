@@ -31,9 +31,9 @@ namespace AssignmentManager.Repository
             return await _context.Assignments.Include(a => a.Notes).FirstOrDefaultAsync(x => x.AssignmentId == assignmentId);
         }
 
-        public async Task<IEnumerable<Assignment>> GetAssignmentsByUserIdAsync(int userId)
+        public async Task<IEnumerable<Assignment>> GetAssignmentsByUserIdAsync(string userId)
         {
-            return await _context.Assignments.Include(a => a.Notes).Where(x => x.UserId == userId).ToListAsync();
+            return await _context.Assignments.Include(a => a.Notes).Where(x => x.AppUserId == userId).ToListAsync();
         }
 
         public bool Save()
