@@ -1,6 +1,7 @@
 ﻿using AssignmentManager.Interfaces;
 using AssignmentManager.Models;
 using AssignmentManager.Repository;
+using AssignmentManager.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssignmentManager.Controllers
@@ -37,8 +38,50 @@ namespace AssignmentManager.Controllers
             }
 
             _noteRepository.Add(note);
+            return RedirectToAction("Index", "Dashboard");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int noteId)
+        {
+            var note = await _noteRepository.GetNotebyIdAsync(noteId);
+
+            if (note != null)
+            {
+                UpdateNoteViewModel updateNotevm = new UpdateNoteViewModel()
+                {
+                    NoteId = noteId,
+                    AssignmentId = note.AssignmentId,
+                    Description = note.Description,
+                    ErrorMessage = string.Empty
+                };
+
+                return View(updateNotevm);
+            }
+
+            return NotFound();
+        }
+
+
+        [HttpPost]
+        public IActionResult Update(UpdateNoteViewModel updateNoteVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(updateNoteVM);
+            }
+
+            Note note = new Note()
+            {
+                Description = updateNoteVM.Description,
+                AssignmentId = updateNoteVM.AssignmentId,
+                NoteId = updateNoteVM.NoteId
+            };
+
+            _noteRepository.Update(note);
             return RedirectToAction("Index", "Assignment");
         }
+
 
         public async Task<IActionResult> NotesPartial(int assignmentId)
         {

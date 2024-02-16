@@ -10,6 +10,13 @@
             @foreach (var note in Model.Notes)
             {
                 <li class="list-group-item">@note.Description</li>
+                <div class="btn-group mb-2">
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                    {
+                       <a type="btn btn-primary" asp-controller="Note" asp-action="Edit" asp-route-noteId="@note.NoteId" class="btn btn-primary btn-lg">Edit</a>                        
+                       <a type="btn btn-success" asp-controller="Note" asp-action="Delete" asp-route-noteId="@note.NoteId" class="btn btn-success btn-lg">View</a>
+                    }
+                </div>
             }
           </ul>
     </div>

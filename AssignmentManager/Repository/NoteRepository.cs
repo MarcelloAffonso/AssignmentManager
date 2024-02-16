@@ -26,6 +26,11 @@ namespace AssignmentManager.Repository
             return Save();
         }
 
+        public async Task<Note> GetNotebyIdAsync(int noteId)
+        {
+            return await _context.Notes.FirstOrDefaultAsync(x => x.NoteId == noteId);
+        }
+
         public async Task<IEnumerable<Note>> GetNotesByAssignmentIdAsync(int assignmentId)
         {
             return await _context.Notes.Where(x => x.AssignmentId == assignmentId).ToListAsync();
