@@ -4,8 +4,10 @@ using AssignmentManager.Helper;
 using AssignmentManager.Interfaces;
 using AssignmentManager.Models;
 using AssignmentManager.ViewModel;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace AssignmentManager.Controllers
 {
@@ -13,21 +15,26 @@ namespace AssignmentManager.Controllers
     {
         private readonly IAssignmentRepository _assignmentRepository;
 
-        public AssignmentController(IAssignmentRepository assignmentRepository)
+        private readonly UserManager<AppUser> _userManager;
+
+        public AssignmentController(IAssignmentRepository assignmentRepository, UserManager<AppUser> userManager)
         {
             this._assignmentRepository = assignmentRepository;
+            this._userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
-            IEnumerable<Assignment> assignments = await _assignmentRepository.GetAssignmentsByUserIdAsync("teste");
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            IEnumerable<Assignment> assignments = await _assignmentRepository.GetAssignmentsByUserIdAsync(userId);
 
             return View(assignments);
         }
 
 
         [HttpGet]
-        public async Task<IActionResult> Detail([FromQuery] int assignmentId)
+        public async Task<IActionResult> Detail(int assignmentId)
         {
             Assignment? assignment = await _assignmentRepository.GetAssignmentByIdAsync(assignmentId);
 
@@ -39,9 +46,17 @@ namespace AssignmentManager.Controllers
             return NotFound();
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            CreateAssignmentViewModel createAssignmentVM = new CreateAssignmentViewModel()
+            {
+                AppUserId = userId
+            };
+
+            return View(createAssignmentVM);
         }
 
         [HttpPost]
@@ -54,12 +69,12 @@ namespace AssignmentManager.Controllers
                     createAssignmentVM.Priority, Status.Open);
 
                 // Default values for a created assignment
-                assignment.AppUserId = "teste";
+                assignment.AppUserId = createAssignmentVM.AppUserId;
                 assignment.LastUpdate = DateTime.Now;
                 assignment.Notes = new List<Note>();
 
                 _assignmentRepository.Add(assignment);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Dashboard");
 
             }
             else
@@ -77,7 +92,7 @@ namespace AssignmentManager.Controllers
                 return NotFound();
             }
 
-            EditAssignmentViewModel editAssignmentVM = new EditAssignmentViewModel
+            UpdateAssignmentViewModel editAssignmentVM = new UpdateAssignmentViewModel
             {
                 AssignmentId = assignmentId,
                 Description = assignment.Description,
@@ -91,7 +106,7 @@ namespace AssignmentManager.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(EditAssignmentViewModel updateAssignmentVM)
+        public async Task<IActionResult> Update(UpdateAssignmentViewModel updateAssignmentVM)
         {
             if (ModelState.IsValid)
             {

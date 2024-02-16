@@ -3,7 +3,7 @@ using AssignmentManager.Models;
 
 namespace AssignmentManager.ViewModel
 {
-    public class EditAssignmentViewModel
+    public class UpdateAssignmentViewModel
     {
         public int AssignmentId { get; set; }
 

@@ -4,7 +4,7 @@ namespace AssignmentManager.ViewModel
 {
     public class CreateAssignmentViewModel
     {
-        //public int UserId { get; set; }
+        public string AppUserId { get; set; }
 
         public Priority Priority { get; set; }
 

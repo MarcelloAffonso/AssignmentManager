@@ -1,23 +1,29 @@
 ﻿@model IEnumerable<Assignment>
 @{
-    ViewData["Title"] = "Assignments page";
+    ViewData["Title"] = "Dashboard";
 }
 
 
 <section class="space-sm flush-with-above">
+   <div class="d-gtid gap-2 d-md-flex justify-content-md-start">
+        <a class="btn btn-primary" role="button" asp-controller="Assignment" asp-action="Create"> New Assignment</a>
+    </div>
     <ul class="row feature-list feature-list-sm">
         @foreach (var assignment in Model)
         {
              <li class="col-12 col-md-6 col-lg-4">
               <div class="card-body">
                 <h4 class="card-title">@assignment.Name</h4>
-                 <p class="card-text">@assignment.Description</p>
+                <h4 class="card-title">@assignment.Name</h4>
                  <p class="card-text">@assignment.Status, @assignment.Priority</p>
               </div>
-                    <div class="btn-group mb-2">
-                          <a type="btn btn-success" asp-controller="Assignment" asp-action="Detail" asp-route-assignmentId="@assignment.AssignmentId" class="btn btn-success btn-lg">View</a>
-                          <a type="btn btn-primary" asp-controller="Assignment" asp-action="Edit" asp-route-assignmentId="@assignment.AssignmentId" class="btn btn-primary btn-lg">Edit</a>
-                  </div>
+              <div class="btn-group mb-2">
+                <a type="btn btn-success" asp-controller="Assignment" asp-action="Detail" asp-route-assignmentId="@assignment.AssignmentId" class="btn btn-success btn-lg">View</a>
+                @if(User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                {
+                    <a type="btn btn-primary" asp-controller="Assignment" asp-action="Edit" asp-route-assignmentId="@assignment.AssignmentId" class="btn btn-primary btn-lg">Edit</a>                        
+                }
+              </div>
             </li>
         }
     </ul>
